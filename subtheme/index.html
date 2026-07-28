@@ -31,7 +31,6 @@ body{
     radial-gradient(900px 520px at 88% 8%, rgba(34,211,238,.20), transparent 62%),
     linear-gradient(160deg,var(--bg0),var(--bg1));
   background-attachment:fixed;
-  transition:color .25s;
 }
 body::before{
   content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
@@ -63,10 +62,8 @@ body::before{
 .ring{display:flex;align-items:center;gap:16px;margin:6px 0 16px}
 .donut{position:relative;width:96px;height:96px;flex-shrink:0}
 .donut svg{transform:rotate(-90deg)}
-.donut .mid{
-  position:absolute;inset:0;display:grid;place-items:center;
-  font-size:15px;font-weight:800;
-}
+.donut .mid{position:absolute;inset:0;display:grid;place-items:center;
+  font-size:15px;font-weight:800}
 .meta{flex:1;min-width:0}
 .meta .big{font-size:20px;font-weight:800;margin-bottom:3px}
 .meta .sml{font-size:12px;color:var(--dim)}
@@ -81,19 +78,25 @@ table{width:100%;border-collapse:collapse}
 td{padding:12px 6px;border-bottom:1px solid var(--line);font-size:13.5px}
 td:first-child{color:var(--dim);width:44%}
 tr:last-child td{border-bottom:none}
-.sec{
-  display:flex;align-items:center;gap:10px;margin:20px 0 12px;
-  font-size:12px;color:var(--dim);font-weight:600;
-}
+.sec{display:flex;align-items:center;gap:10px;margin:20px 0 12px;
+  font-size:12px;color:var(--dim);font-weight:600}
 .sec::before,.sec::after{content:"";height:1px;background:var(--line);flex:1}
 .item{
   display:flex;gap:9px;align-items:center;padding:12px;margin-bottom:9px;
   background:rgba(255,255,255,.035);border:1px solid var(--line);
   border-radius:13px;transition:.18s;
 }
-.item:hover{border-color:rgba(124,92,255,.42);transform:translateX(-2px)}
-.item .nm{flex:1;min-width:0;font-size:13px;word-break:break-all;font-weight:600}
-.item .em{font-size:11px;color:var(--dim);margin-top:3px;font-weight:400}
+.item:hover{border-color:rgba(124,92,255,.42)}
+.item .nm{flex:1;min-width:0}
+.item .t1{font-size:13px;font-weight:700;word-break:break-all;
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.item .em{font-size:11px;color:var(--dim);margin-top:4px}
+.tag{
+  display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;
+  padding:3px 9px;border-radius:999px;white-space:nowrap;
+  background:linear-gradient(135deg,rgba(124,92,255,.22),rgba(34,211,238,.18));
+  border:1px solid rgba(124,92,255,.34);color:var(--txt);
+}
 .b{
   border:0;border-radius:10px;padding:8px 13px;font-size:12px;cursor:pointer;
   font-family:inherit;font-weight:700;transition:.18s;flex-shrink:0;
@@ -108,12 +111,10 @@ tr:last-child td{border-bottom:none}
   font-family:ui-monospace,monospace;line-height:1.6;
 }
 .row2{display:flex;gap:9px;flex-wrap:wrap}
-.qr{
-  display:none;place-items:center;padding:18px;margin-top:10px;
-  background:#fff;border-radius:14px;
-}
+.qr{display:none;place-items:center;padding:18px;margin-top:10px;
+  background:#fff;border-radius:14px}
 .qr.show{display:grid}
-.qr img,.qr canvas{max-width:200px;width:100%;height:auto;display:block}
+.qr canvas{max-width:210px;width:100%;height:auto;display:block;image-rendering:pixelated}
 .toast{
   position:fixed;left:50%;bottom:26px;transform:translate(-50%,120px);
   background:var(--acc);color:#fff;padding:11px 22px;border-radius:999px;
@@ -130,8 +131,8 @@ tr:last-child td{border-bottom:none}
     <div class="top">
       <div class="title" data-i="title">اطلاعات اشتراک</div>
       <span class="sid">{{.sId}}</span>
-      <button class="ico" id="bt" title="تم">◐</button>
-      <button class="ico" id="bl" title="زبان">فا</button>
+      <button class="ico" id="bt" title="theme">◐</button>
+      <button class="ico" id="bl" title="lang">فا</button>
     </div>
 
     <div class="ring">
@@ -158,9 +159,9 @@ tr:last-child td{border-bottom:none}
       <tr><td data-i="email">ایمیل</td><td id="tEmail">—</td></tr>
       <tr><td data-i="device">آخرین دستگاه</td><td id="tDev">—</td></tr>
       <tr><td data-i="last">آخرین اتصال</td><td id="tLast">—</td></tr>
-      <tr><td data-i="dl">دانلود</td><td>{{.download}}</td></tr>
-      <tr><td data-i="ul">آپلود</td><td>{{.upload}}</td></tr>
-      <tr><td data-i="rem">باقیمانده</td><td>{{if .remained}}{{.remained}}{{else}}<span data-i="unl">نامحدود</span>{{end}}</td></tr>
+      <tr><td data-i="dl">دانلود</td><td id="tDl">{{.download}}</td></tr>
+      <tr><td data-i="ul">آپلود</td><td id="tUl">{{.upload}}</td></tr>
+      <tr><td data-i="rem">باقیمانده</td><td id="tRem">—</td></tr>
       <tr><td data-i="exp">تاریخ پایان</td><td id="tExp">—</td></tr>
       <tr><td data-i="left">روز باقیمانده</td><td id="tLeft">—</td></tr>
     </table>
@@ -170,8 +171,8 @@ tr:last-child td{border-bottom:none}
     <div class="sec" data-i="sublink">لینک اشتراک</div>
     <div class="urlbox" id="uSub">{{.subUrl}}</div>
     <div class="row2">
-      <button class="b" onclick="cp(document.getElementById('uSub').innerText)"><span data-i="copy">کپی لینک</span></button>
-      <button class="b g" onclick="qr('qSub',document.getElementById('uSub').innerText)"><span data-i="qr">کد QR</span></button>
+      <button class="b" onclick="cp(SUBU)"><span data-i="copy">کپی لینک</span></button>
+      <button class="b g" onclick="qr('qSub',SUBU)"><span data-i="qr">کد QR</span></button>
     </div>
     <div class="qr" id="qSub"></div>
 
@@ -182,199 +183,222 @@ tr:last-child td{border-bottom:none}
 </div>
 <div class="toast" id="toast"></div>
 
+<script src="qrcode.js"></script>
 <script>
 var LINKS  = {{.links}};
 var EMAILS = {{.emails}};
 var LAST   = {{.lastOnline}};
 var EXPIRE = {{.expire}};
-var USEDB  = {{.downloadByte}} + {{.uploadByte}};
+var DLB    = {{.downloadByte}};
+var ULB    = {{.uploadByte}};
 var TOTB   = {{.totalByte}};
-var USEDS  = "{{.used}}";
-var TOTS   = "{{.total}}";
+var SUBU   = "{{.subUrl}}";
 
-var T = {
-  fa:{title:"اطلاعات اشتراک",of:"از",on:"آنلاین",off:"آفلاین",email:"ایمیل",
-      device:"آخرین دستگاه",last:"آخرین اتصال",dl:"دانلود",ul:"آپلود",
-      rem:"باقیمانده",exp:"تاریخ پایان",left:"روز باقیمانده",unl:"نامحدود",
-      sublink:"لینک اشتراک",configs:"کانفیگ‌ها",copy:"کپی لینک",qr:"کد QR",
-      copied:"کپی شد",never:"تاکنون متصل نشده",noexp:"بدون انقضا",
-      now:"چند لحظه پیش",min:"دقیقه پیش",hr:"ساعت پیش",day:"روز پیش",
-      none:"کانفیگی موجود نیست",cp:"کپی",unk:"نامشخص"},
-  en:{title:"Subscription Info",of:"of",on:"Online",off:"Offline",email:"Email",
-      device:"Last Device",last:"Last Seen",dl:"Download",ul:"Upload",
-      rem:"Remaining",exp:"Expire Date",left:"Days Left",unl:"Unlimited",
-      sublink:"Subscription Link",configs:"Configs",copy:"Copy Link",qr:"QR Code",
-      copied:"Copied",never:"Never connected",noexp:"No expiry",
-      now:"just now",min:"min ago",hr:"hr ago",day:"days ago",
-      none:"No configs",cp:"Copy",unk:"Unknown"},
-  ru:{title:"Информация",of:"из",on:"Онлайн",off:"Офлайн",email:"Эл. почта",
-      device:"Устройство",last:"Был онлайн",dl:"Загрузка",ul:"Отдача",
-      rem:"Осталось",exp:"Дата окончания",left:"Дней осталось",unl:"Безлимит",
-      sublink:"Ссылка подписки",configs:"Конфиги",copy:"Копировать",qr:"QR-код",
-      copied:"Скопировано",never:"Не подключался",noexp:"Без срока",
-      now:"только что",min:"мин назад",hr:"ч назад",day:"дн назад",
-      none:"Нет конфигов",cp:"Копия",unk:"Неизвестно"}
+var T={
+ fa:{title:"اطلاعات اشتراک",of:"از",on:"آنلاین",off:"آفلاین",email:"ایمیل",
+  device:"آخرین دستگاه",last:"آخرین اتصال",dl:"دانلود",ul:"آپلود",rem:"باقیمانده",
+  exp:"تاریخ پایان",left:"روز باقیمانده",unl:"نامحدود",sublink:"لینک اشتراک",
+  configs:"کانفیگ‌ها",copy:"کپی لینک",qr:"کد QR",copied:"کپی شد",
+  never:"تاکنون متصل نشده",noexp:"بدون انقضا",now:"چند لحظه پیش",min:"دقیقه پیش",
+  hr:"ساعت پیش",day:"روز پیش",none:"کانفیگی موجود نیست",cp:"کپی",unk:"نامشخص"},
+ en:{title:"Subscription Info",of:"of",on:"Online",off:"Offline",email:"Email",
+  device:"Last Device",last:"Last Seen",dl:"Download",ul:"Upload",rem:"Remaining",
+  exp:"Expire Date",left:"Days Left",unl:"Unlimited",sublink:"Subscription Link",
+  configs:"Configs",copy:"Copy Link",qr:"QR Code",copied:"Copied",
+  never:"Never connected",noexp:"No expiry",now:"just now",min:"min ago",
+  hr:"hr ago",day:"days ago",none:"No configs",cp:"Copy",unk:"Unknown"},
+ ru:{title:"Информация",of:"из",on:"Онлайн",off:"Офлайн",email:"Эл. почта",
+  device:"Устройство",last:"Был онлайн",dl:"Загрузка",ul:"Отдача",rem:"Осталось",
+  exp:"Дата окончания",left:"Дней осталось",unl:"Безлимит",sublink:"Ссылка подписки",
+  configs:"Конфиги",copy:"Копировать",qr:"QR-код",copied:"Скопировано",
+  never:"Не подключался",noexp:"Без срока",now:"только что",min:"мин назад",
+  hr:"ч назад",day:"дн назад",none:"Нет конфигов",cp:"Копия",unk:"Неизвестно"}
 };
-var LANGS=["fa","en","ru"], LBL={fa:"فا",en:"EN",ru:"RU"};
-var lang = localStorage.getItem("sl") || "fa";
-var THEMES=["dark","light","gray"], GL={dark:"◐",light:"☀",gray:"◑"};
-var theme = localStorage.getItem("st") || "dark";
+var LANGS=["fa","en","ru"],LBL={fa:"فا",en:"EN",ru:"RU"};
+var lang=localStorage.getItem("sl")||"fa";
+var THEMES=["dark","light","gray"],GL={dark:"◐",light:"☀",gray:"◑"};
+var theme=localStorage.getItem("st")||"dark";
+function t(k){return (T[lang]&&T[lang][k])||T.fa[k]||k;}
 
-function t(k){ return (T[lang]&&T[lang][k]) || T.fa[k] || k; }
-
+function fmtB(b){
+  if(b===null||b===undefined||isNaN(b))return "0.00B";
+  if(b<1024)return b.toFixed(0)+"B";
+  var u=["KB","MB","GB","TB"],i=-1,v=b;
+  do{v/=1024;i++;}while(v>=1024&&i<u.length-1);
+  return v.toFixed(2)+u[i];
+}
 function applyLang(){
-  document.documentElement.lang = lang;
-  document.documentElement.dir  = (lang==="fa") ? "rtl" : "ltr";
-  var n = document.querySelectorAll("[data-i]");
-  for (var i=0;i<n.length;i++) n[i].textContent = t(n[i].getAttribute("data-i"));
-  document.getElementById("bl").textContent = LBL[lang];
+  document.documentElement.lang=lang;
+  document.documentElement.dir=(lang==="fa")?"rtl":"ltr";
+  var n=document.querySelectorAll("[data-i]");
+  for(var i=0;i<n.length;i++)n[i].textContent=t(n[i].getAttribute("data-i"));
+  document.getElementById("bl").textContent=LBL[lang];
   render();
 }
 function applyTheme(){
-  document.documentElement.setAttribute("data-t", theme);
-  document.getElementById("bt").textContent = GL[theme];
+  document.documentElement.setAttribute("data-t",theme);
+  document.getElementById("bt").textContent=GL[theme];
 }
-document.getElementById("bl").onclick = function(){
-  lang = LANGS[(LANGS.indexOf(lang)+1) % LANGS.length];
-  localStorage.setItem("sl",lang); applyLang();
+document.getElementById("bl").onclick=function(){
+  lang=LANGS[(LANGS.indexOf(lang)+1)%LANGS.length];
+  localStorage.setItem("sl",lang);applyLang();
 };
-document.getElementById("bt").onclick = function(){
-  theme = THEMES[(THEMES.indexOf(theme)+1) % THEMES.length];
-  localStorage.setItem("st",theme); applyTheme();
+document.getElementById("bt").onclick=function(){
+  theme=THEMES[(THEMES.indexOf(theme)+1)%THEMES.length];
+  localStorage.setItem("st",theme);applyTheme();
 };
-
 function nameOf(l){
-  var i=l.indexOf("#"); if(i<0) return "Config";
-  try{ return decodeURIComponent(l.slice(i+1)); }catch(e){ return l.slice(i+1); }
+  var i=l.indexOf("#");if(i<0)return "Config";
+  try{return decodeURIComponent(l.slice(i+1));}catch(e){return l.slice(i+1);}
 }
 function detectDev(){
-  var u=navigator.userAgent||"", d=navigator.userAgentData;
+  var u=navigator.userAgent||"",d=navigator.userAgentData;
   if(d&&d.platform){
-    if(d.platform==="Android") return andr(u);
-    if(d.platform==="Windows") return "Windows";
-    if(d.platform==="macOS")   return "macOS";
+    if(d.platform==="Android")return andr(u);
+    if(d.platform==="Windows")return "Windows";
+    if(d.platform==="macOS")return "macOS";
   }
-  if(/iPad/i.test(u)) return "iPad";
-  if(/iPhone/i.test(u)) return "iPhone";
-  if(/iPod/i.test(u)) return "iPod";
-  if(/Macintosh/i.test(u)&&navigator.maxTouchPoints>1) return "iPad";
-  if(/Android/i.test(u)) return andr(u);
-  if(/Windows/i.test(u)) return "Windows";
-  if(/Macintosh|Mac OS X/i.test(u)) return "macOS";
-  if(/CrOS/i.test(u)) return "ChromeOS";
-  if(/Linux/i.test(u)) return "Linux";
+  if(/iPad/i.test(u))return "iPad";
+  if(/iPhone/i.test(u))return "iPhone";
+  if(/iPod/i.test(u))return "iPod";
+  if(/Macintosh/i.test(u)&&navigator.maxTouchPoints>1)return "iPad";
+  if(/Android/i.test(u))return andr(u);
+  if(/Windows/i.test(u))return "Windows";
+  if(/Macintosh|Mac OS X/i.test(u))return "macOS";
+  if(/CrOS/i.test(u))return "ChromeOS";
+  if(/Linux/i.test(u))return "Linux";
   return t("unk");
 }
 function andr(u){
-  var b=[[/Redmi/i,"Redmi"],[/POCO/i,"POCO"],[/Xiaomi|MI\s|M2\d{3}|22\d{6}|23\d{6}/i,"Xiaomi"],
-    [/SM-|Samsung|Galaxy/i,"Samsung"],[/Honor/i,"Honor"],
-    [/HUAWEI|HMA-|ANE-|VOG-|ELS-/i,"Huawei"],[/OPPO|CPH\d{4}/i,"OPPO"],
-    [/vivo|V\d{4}A/i,"vivo"],[/OnePlus|GM\d{4}|IN\d{4}|KB\d{4}/i,"OnePlus"],
-    [/realme|RMX\d{4}/i,"realme"],[/Pixel/i,"Google Pixel"],[/Nokia|TA-\d{4}/i,"Nokia"],
-    [/Motorola|moto/i,"Motorola"],[/LG-|LM-/i,"LG"],[/Infinix/i,"Infinix"],
-    [/Tecno/i,"Tecno"],[/itel/i,"itel"],[/ZTE/i,"ZTE"],[/Lenovo/i,"Lenovo"],
-    [/ASUS/i,"ASUS"],[/Sony|XQ-|SO-\d{2}/i,"Sony"],[/Nothing|A0\d{2}/i,"Nothing"],
-    [/HTC/i,"HTC"],[/Meizu/i,"Meizu"]];
-  for(var i=0;i<b.length;i++) if(b[i][0].test(u)) return b[i][1]+" · Android";
+  var b=[[/Redmi/i,"Redmi"],[/POCO/i,"POCO"],
+   [/Xiaomi|MI\s|M2\d{3}|22\d{6}|23\d{6}/i,"Xiaomi"],
+   [/SM-|Samsung|Galaxy/i,"Samsung"],[/Honor/i,"Honor"],
+   [/HUAWEI|HMA-|ANE-|VOG-|ELS-/i,"Huawei"],[/OPPO|CPH\d{4}/i,"OPPO"],
+   [/vivo|V\d{4}A/i,"vivo"],[/OnePlus|GM\d{4}|IN\d{4}|KB\d{4}/i,"OnePlus"],
+   [/realme|RMX\d{4}/i,"realme"],[/Pixel/i,"Google Pixel"],
+   [/Nokia|TA-\d{4}/i,"Nokia"],[/Motorola|moto/i,"Motorola"],
+   [/LG-|LM-/i,"LG"],[/Infinix/i,"Infinix"],[/Tecno/i,"Tecno"],
+   [/itel/i,"itel"],[/ZTE/i,"ZTE"],[/Lenovo/i,"Lenovo"],[/ASUS/i,"ASUS"],
+   [/Sony|XQ-|SO-\d{2}/i,"Sony"],[/Nothing|A0\d{2}/i,"Nothing"],
+   [/HTC/i,"HTC"],[/Meizu/i,"Meizu"]];
+  for(var i=0;i<b.length;i++)if(b[i][0].test(u))return b[i][1]+" · Android";
   return "Android";
 }
 function fmtD(ms){
-  var loc = lang==="fa" ? "fa-IR" : (lang==="ru" ? "ru-RU" : "en-GB");
-  try{ return new Date(ms).toLocaleString(loc,
-    {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}); }
-  catch(e){ return new Date(ms).toLocaleString(); }
+  var loc=lang==="fa"?"fa-IR":(lang==="ru"?"ru-RU":"en-GB");
+  try{return new Date(ms).toLocaleString(loc,
+    {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});}
+  catch(e){return new Date(ms).toLocaleString();}
 }
 function ago(ms){
   var s=Math.floor(ms/1000);
-  if(s<60) return t("now");
-  if(s<3600) return Math.floor(s/60)+" "+t("min");
-  if(s<86400) return Math.floor(s/3600)+" "+t("hr");
+  if(s<60)return t("now");
+  if(s<3600)return Math.floor(s/60)+" "+t("min");
+  if(s<86400)return Math.floor(s/3600)+" "+t("hr");
   return Math.floor(s/86400)+" "+t("day");
 }
 function render(){
-  document.getElementById("tDev").textContent   = detectDev();
-  document.getElementById("tEmail").textContent = (EMAILS&&EMAILS.length) ? EMAILS[0] : "—";
-  document.getElementById("mUsed").textContent  = USEDS;
-  document.getElementById("mTot").textContent   = TOTS;
+  document.getElementById("tDev").textContent=detectDev();
+  document.getElementById("tEmail").textContent=(EMAILS&&EMAILS.length)?EMAILS[0]:"—";
+  var used=DLB+ULB;
+  document.getElementById("mUsed").textContent=fmtB(used);
+  document.getElementById("mTot").textContent=TOTB>0?fmtB(TOTB):"∞";
+  document.getElementById("tDl").textContent=fmtB(DLB);
+  document.getElementById("tUl").textContent=fmtB(ULB);
+  document.getElementById("tRem").textContent=
+    TOTB>0?fmtB(Math.max(TOTB-used,0)):t("unl");
 
-  var st=document.getElementById("mSt"), lo=document.getElementById("tLast");
-  if(!LAST || LAST<=0){
+  var st=document.getElementById("mSt"),lo=document.getElementById("tLast");
+  if(!LAST||LAST<=0){
     st.innerHTML='<span class="pill off"><span class="dot"></span>'+t("off")+'</span>';
     lo.textContent=t("never");
   }else{
-    var ms = LAST>1e12 ? LAST : LAST*1000, df = Date.now()-ms;
-    st.innerHTML = df<180000
-      ? '<span class="pill on"><span class="dot"></span>'+t("on")+'</span>'
-      : '<span class="pill off"><span class="dot"></span>'+t("off")+'</span>';
-    lo.textContent = fmtD(ms)+" · "+ago(df);
+    var ms=LAST>1e12?LAST:LAST*1000,df=Date.now()-ms;
+    st.innerHTML=df<180000
+      ?'<span class="pill on"><span class="dot"></span>'+t("on")+'</span>'
+      :'<span class="pill off"><span class="dot"></span>'+t("off")+'</span>';
+    lo.textContent=fmtD(ms)+" · "+ago(df);
   }
-
-  var ex=document.getElementById("tExp"), lf=document.getElementById("tLeft");
-  if(!EXPIRE || EXPIRE<=0){ ex.textContent=t("noexp"); lf.textContent="∞"; }
+  var ex=document.getElementById("tExp"),lf=document.getElementById("tLeft");
+  if(!EXPIRE||EXPIRE<=0){ex.textContent=t("noexp");lf.textContent="∞";}
   else{
-    var e = EXPIRE>1e12 ? EXPIRE : EXPIRE*1000;
-    ex.textContent = fmtD(e);
-    var d = Math.ceil((e-Date.now())/86400000);
-    lf.textContent = d>0 ? d : "0";
+    var e=EXPIRE>1e12?EXPIRE:EXPIRE*1000;
+    ex.textContent=fmtD(e);
+    var d=Math.ceil((e-Date.now())/86400000);
+    lf.textContent=d>0?d:"0";
   }
+  var p=(TOTB>0)?Math.min(100,used/TOTB*100):0;
+  document.getElementById("pct").textContent=(TOTB>0)?p.toFixed(0)+"%":"∞";
+  document.getElementById("arc").style.strokeDashoffset=257.6*(1-p/100);
 
-  var p = (TOTB>0) ? Math.min(100, USEDB/TOTB*100) : 0;
-  document.getElementById("pct").textContent = (TOTB>0) ? p.toFixed(0)+"%" : "∞";
-  document.getElementById("arc").style.strokeDashoffset = 257.6*(1-p/100);
-
-  var box=document.getElementById("list"); box.innerHTML="";
-  if(!LINKS || !LINKS.length){
-    box.innerHTML='<div class="urlbox">'+t("none")+'</div>'; return;
+  var box=document.getElementById("list");box.innerHTML="";
+  if(!LINKS||!LINKS.length){
+    box.innerHTML='<div class="urlbox">'+t("none")+'</div>';return;
   }
+  var per=LINKS.length>0?used/LINKS.length:0;
   for(var i=0;i<LINKS.length;i++){
     (function(link,idx){
-      var it=document.createElement("div"); it.className="item";
-      var nm=document.createElement("div"); nm.className="nm";
-      nm.textContent=nameOf(link);
-      if(EMAILS && EMAILS[idx]){
-        var em=document.createElement("div"); em.className="em";
-        em.textContent=EMAILS[idx]; nm.appendChild(em);
+      var it=document.createElement("div");it.className="item";
+      var nm=document.createElement("div");nm.className="nm";
+      var t1=document.createElement("div");t1.className="t1";
+      var sp=document.createElement("span");sp.textContent=nameOf(link);
+      var tg=document.createElement("span");tg.className="tag";
+      tg.textContent="📊 "+fmtB(per);
+      t1.appendChild(sp);t1.appendChild(tg);nm.appendChild(t1);
+      if(EMAILS&&EMAILS[idx]){
+        var em=document.createElement("div");em.className="em";
+        em.textContent=EMAILS[idx];nm.appendChild(em);
       }
-      var b1=document.createElement("button"); b1.className="b";
-      b1.textContent=t("cp"); b1.onclick=function(){ cp(link); };
-      var b2=document.createElement("button"); b2.className="b g";
-      b2.textContent="QR"; b2.onclick=function(){ qr("q"+idx,link); };
-      var q=document.createElement("div"); q.className="qr"; q.id="q"+idx;
-      it.appendChild(nm); it.appendChild(b1); it.appendChild(b2);
-      box.appendChild(it); box.appendChild(q);
+      var b1=document.createElement("button");b1.className="b";
+      b1.textContent=t("cp");b1.onclick=function(){cp(link);};
+      var b2=document.createElement("button");b2.className="b g";
+      b2.textContent="QR";b2.onclick=function(){qr("q"+idx,link);};
+      var q=document.createElement("div");q.className="qr";q.id="q"+idx;
+      it.appendChild(nm);it.appendChild(b1);it.appendChild(b2);
+      box.appendChild(it);box.appendChild(q);
     })(LINKS[i],i);
   }
 }
+
+/* ---- QR: کتابخانه محلی، بدون هیچ درخواست بیرونی ---- */
 function qr(id,text){
   var el=document.getElementById(id);
-  if(el.classList.contains("show")){ el.classList.remove("show"); return; }
+  if(el.classList.contains("show")){el.classList.remove("show");return;}
   if(!el.dataset.done){
-    var img=new Image();
-    img.src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=8&data="+
-            encodeURIComponent(text);
-    img.alt="QR"; el.appendChild(img); el.dataset.done="1";
+    var q=null;
+    for(var ty=4;ty<=40;ty++){
+      try{ var t2=qrcode(ty,"M"); t2.addData(text); t2.make(); q=t2; break; }catch(e){}
+    }
+    if(!q){el.textContent="—";el.dataset.done="1";el.classList.add("show");return;}
+    var n=q.getModuleCount(),pad=4,s=4,cv=document.createElement("canvas");
+    cv.width=cv.height=(n+pad*2)*s;
+    var g=cv.getContext("2d");
+    g.fillStyle="#fff";g.fillRect(0,0,cv.width,cv.height);
+    g.fillStyle="#000";
+    for(var r=0;r<n;r++)for(var c3=0;c3<n;c3++)
+      if(q.isDark(r,c3))g.fillRect((c3+pad)*s,(r+pad)*s,s,s);
+    el.appendChild(cv);el.dataset.done="1";
   }
   el.classList.add("show");
 }
 function cp(text){
   var done=function(){
     var e=document.getElementById("toast");
-    e.textContent=t("copied"); e.classList.add("show");
-    setTimeout(function(){ e.classList.remove("show"); },1500);
+    e.textContent=t("copied");e.classList.add("show");
+    setTimeout(function(){e.classList.remove("show");},1500);
   };
-  if(navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(text).then(done,function(){ fb(text,done); });
-  } else fb(text,done);
+  if(navigator.clipboard&&window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done,function(){fb(text,done);});
+  }else fb(text,done);
 }
 function fb(text,done){
   var a=document.createElement("textarea");
-  a.value=text; a.style.position="fixed"; a.style.opacity="0";
-  document.body.appendChild(a); a.select();
-  try{ document.execCommand("copy"); done(); }catch(e){}
+  a.value=text;a.style.position="fixed";a.style.opacity="0";
+  document.body.appendChild(a);a.select();
+  try{document.execCommand("copy");done();}catch(e){}
   document.body.removeChild(a);
 }
-applyTheme();
-applyLang();
+applyTheme();applyLang();
 setInterval(render,30000);
 </script>
 </body>
