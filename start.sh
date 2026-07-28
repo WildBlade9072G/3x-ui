@@ -67,8 +67,8 @@ chain = INPUT
 exemptports = 22,2053,2054
 EOF
 
-echo "\u25b6\ufe0f  Starting fail2ban..."
-fail2ban-client -x start || echo "\u26a0\ufe0f  fail2ban start failed (IP Limit may stay locked)"
+echo "▶️  Starting fail2ban..."
+fail2ban-client -x start || echo "⚠️  fail2ban start failed (IP Limit may stay locked)"
 
 echo "🔧 Applying panel settings via x-ui CLI..."
 ./x-ui setting -port 2054 -webBasePath /managepanel/ || true
