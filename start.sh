@@ -86,7 +86,7 @@ X_UI_PID=$!
 # پنل subURI را مبنای ساخت لینک/QR قرار می‌دهد، پس پورت داخلی
 # دیگر در لینک ظاهر نمی‌شود.
 # ---------------------------------------------------------------
-SUB_URI="https://gucciyt.de5.net/sub/"
+SUB_URI="https://gucciyt.ccwu.cc/sub/"
 DB="/etc/x-ui/x-ui.db"
 for _ in $(seq 1 30); do
     [ -f "$DB" ] && break
