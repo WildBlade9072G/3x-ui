@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>اطلاعات اشتراک</title>
+<style>
+  :root{
+    --bg:#0f1115; --card:#171a21; --line:#252a34;
+    --txt:#e6e8ec; --dim:#9aa3b2;
+    --on:#22c55e; --off:#6b7280; --accent:#7c5cff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;padding:16px;background:var(--bg);color:var(--txt);
+       font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}
+  .wrap{max-width:640px;margin:0 auto}
+  .card{background:var(--card);border:1px solid var(--line);
+        border-radius:14px;padding:18px;margin-bottom:14px}
+  h1{font-size:17px;margin:0 0 14px}
+  table{width:100%;border-collapse:collapse}
+  td{padding:11px 8px;border-bottom:1px solid var(--line);font-size:14px}
+  td:first-child{color:var(--dim);width:42%}
+  tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;padding:3px 11px;border-radius:999px;
+        font-size:12px;font-weight:600}
+  .pill.on{background:rgba(34,197,94,.15);color:var(--on)}
+  .pill.off{background:rgba(107,114,128,.15);color:var(--off)}
+  .sec{font-size:13px;color:var(--dim);text-align:center;
+       margin:18px 0 10px;letter-spacing:.3px}
+  .row{display:flex;gap:8px;align-items:center;
+       background:#12151b;border:1px solid var(--line);
+       border-radius:10px;padding:11px;margin-bottom:8px}
+  .row .name{flex:1;font-size:13px;word-break:break-all}
+  button{background:var(--accent);color:#fff;border:0;border-radius:8px;
+         padding:7px 13px;font-size:12px;cursor:pointer;font-family:inherit}
+  button:active{opacity:.7}
+  .sub{font-size:12px;color:var(--dim);word-break:break-all;
+       background:#12151b;border:1px solid var(--line);
+       border-radius:10px;padding:11px;margin-bottom:8px}
+  .dev{font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card">
+    <h1>اطلاعات اشتراک</h1>
+    <table>
+      <tr><td>شناسه اشتراک</td><td>{{.sId}}</td></tr>
+      <tr><td>وضعیت اتصال</td><td id="st"><span class="pill off">آفلاین</span></td></tr>
+      <tr><td>آخرین دستگاه</td><td class="dev" id="dev">—</td></tr>
+      <tr><td>آخرین اتصال</td><td id="lo">—</td></tr>
+      <tr><td>دانلود</td><td>{{.download}}</td></tr>
+      <tr><td>آپلود</td><td>{{.upload}}</td></tr>
+      <tr><td>مصرف کل</td><td>{{.used}}</td></tr>
+      <tr><td>حجم کل</td><td>{{.total}}</td></tr>
+      <tr><td>باقیمانده</td><td>{{if .remained}}{{.remained}}{{else}}نامحدود{{end}}</td></tr>
+      <tr><td>تاریخ پایان</td><td id="exp">—</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="sec">لینک اشتراک</div>
+    <div class="sub" id="suburl">{{.subUrl}}</div>
+    <button onclick="cp(document.getElementById('suburl').innerText,this)">کپی لینک</button>
+
+    <div class="sec">کانفیگ‌ها</div>
+    <div id="list"></div>
+  </div>
+
+</div>
+
+<script>
+var LINKS = {{.links}};
+var LAST_ONLINE = {{.lastOnline}};
+var EXPIRE = {{.expire}};
+
+// ---- نام کانفیگ: هر چیزی بعد از # ----
+function nameOf(link){
+  var i = link.indexOf('#');
+  if (i < 0) return 'کانفیگ';
+  try { return decodeURIComponent(link.slice(i+1)); }
+  catch(e){ return link.slice(i+1); }
+}
+
+// ---- تشخیص دستگاه از روی مرورگر خود کاربر ----
+function detectDevice(){
+  var u = navigator.userAgent || '';
+  var d = navigator.userAgentData;
+  if (d && d.platform){
+    if (d.platform === 'Android') return androidName(u);
+    if (d.platform === 'Windows') return 'ویندوز';
+    if (d.platform === 'macOS')   return 'مک';
+  }
+  if (/iPad/i.test(u)) return 'آی‌پد';
+  if (/iPhone/i.test(u)) return 'آیفون';
+  if (/iPod/i.test(u)) return 'آی‌پاد';
+  // آیپد جدید خودش را مک معرفی می‌کند
+  if (/Macintosh/i.test(u) && navigator.maxTouchPoints > 1) return 'آی‌پد';
+  if (/Android/i.test(u)) return androidName(u);
+  if (/Windows/i.test(u)) return 'ویندوز';
+  if (/Macintosh|Mac OS X/i.test(u)) return 'مک';
+  if (/Linux/i.test(u)) return 'لینوکس';
+  return 'نامشخص';
+}
+
+function androidName(u){
+  var brands = [
+    [/Xiaomi|Redmi|POCO|MI\s|M2\d{3}|22\d{6}/i, 'شیائومی'],
+    [/SM-|Samsung|Galaxy/i,                     'سامسونگ'],
+    [/HUAWEI|Honor|HMA-|ANE-|VOG-/i,            'هواوی'],
+    [/OPPO|CPH\d{4}/i,                          'اوپو'],
+    [/vivo|V\d{4}A/i,                           'ویوو'],
+    [/OnePlus|GM\d{4}|IN\d{4}/i,                'وان‌پلاس'],
+    [/realme|RMX\d{4}/i,                        'ریلمی'],
+    [/Pixel/i,                                  'پیکسل'],
+    [/Nokia/i,                                  'نوکیا'],
+    [/Motorola|moto/i,                          'موتورولا'],
+    [/LG-|LM-/i,                                'ال‌جی'],
+    [/Infinix/i,                                'اینفینیکس'],
+    [/Tecno/i,                                  'تکنو'],
+    [/ZTE/i,                                    'زدتی‌ای'],
+    [/Lenovo/i,                                 'لنوو'],
+    [/ASUS/i,                                   'ایسوس'],
+    [/Sony|XQ-/i,                               'سونی'],
+    [/Nothing|A0\d{2}/i,                        'ناتینگ']
+  ];
+  for (var i=0;i<brands.length;i++){
+    if (brands[i][0].test(u)) return brands[i][1] + ' (اندروید)';
+  }
+  return 'اندروید';
+}
+
+// ---- وضعیت آنلاین از روی آخرین فعالیت ----
+function renderStatus(){
+  var el = document.getElementById('st');
+  var lo = document.getElementById('lo');
+  if (!LAST_ONLINE || LAST_ONLINE <= 0){
+    el.innerHTML = '<span class="pill off">آفلاین</span>';
+    lo.textContent = 'تاکنون متصل نشده';
+    return;
+  }
+  var ms   = LAST_ONLINE > 1e12 ? LAST_ONLINE : LAST_ONLINE * 1000;
+  var diff = Date.now() - ms;
+  // پنل هر ~۱۰ ثانیه به‌روز می‌کند؛ زیر ۳ دقیقه یعنی هنوز وصل است
+  if (diff < 180000){
+    el.innerHTML = '<span class="pill on">آنلاین</span>';
+  } else {
+    el.innerHTML = '<span class="pill off">آفلاین</span>';
+  }
+  lo.textContent = fmt(ms) + ' — ' + ago(diff);
+}
+
+function fmt(ms){
+  try {
+    return new Date(ms).toLocaleString('fa-IR',
+      {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
+  } catch(e){ return new Date(ms).toLocaleString(); }
+}
+
+function ago(ms){
+  var s = Math.floor(ms/1000);
+  if (s < 60)    return 'چند لحظه پیش';
+  if (s < 3600)  return Math.floor(s/60) + ' دقیقه پیش';
+  if (s < 86400) return Math.floor(s/3600) + ' ساعت پیش';
+  return Math.floor(s/86400) + ' روز پیش';
+}
+
+function renderExpire(){
+  var el = document.getElementById('exp');
+  if (!EXPIRE || EXPIRE <= 0){ el.textContent = 'بدون انقضا'; return; }
+  var ms = EXPIRE > 1e12 ? EXPIRE : EXPIRE * 1000;
+  el.textContent = fmt(ms);
+}
+
+// ---- لیست کانفیگ‌ها: فقط نام، بدون نوع و پروتکل ----
+function renderLinks(){
+  var box = document.getElementById('list');
+  if (!LINKS || !LINKS.length){
+    box.innerHTML = '<div class="sub">کانفیگی موجود نیست</div>';
+    return;
+  }
+  for (var i=0;i<LINKS.length;i++){
+    (function(link){
+      var row = document.createElement('div');
+      row.className = 'row';
+      var nm = document.createElement('div');
+      nm.className = 'name';
+      nm.textContent = nameOf(link);
+      var b = document.createElement('button');
+      b.textContent = 'کپی';
+      b.onclick = function(){ cp(link, b); };
+      row.appendChild(nm); row.appendChild(b);
+      box.appendChild(row);
+    })(LINKS[i]);
+  }
+}
+
+function cp(text, btn){
+  var done = function(){
+    var t = btn.textContent; btn.textContent = 'کپی شد';
+    setTimeout(function(){ btn.textContent = t; }, 1200);
+  };
+  if (navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
+  } else { fallback(text, done); }
+}
+
+function fallback(text, done){
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+document.getElementById('dev').textContent = detectDevice();
+renderStatus();
+renderExpire();
+renderLinks();
+setInterval(renderStatus, 30000);
+</script>
+</body>
+</html>
