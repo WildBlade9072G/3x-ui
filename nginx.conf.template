@@ -22,8 +22,8 @@ http {
 
         # مسیر پنل وب: روی یک مسیر مخفی سرو می‌شود تا حذف کردن انتهای
         # لینک ساب کسی را به صفحه ورود پنل نرساند.
-        location /x9k2m7panel/ {
-            proxy_pass http://127.0.0.1:2054/x9k2m7panel/;
+        location /guccipanel/ {
+            proxy_pass http://127.0.0.1:2054/guccipanel/;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
