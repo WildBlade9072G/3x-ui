@@ -80,6 +80,27 @@ echo "▶️  Starting x-ui in background..."
 ./x-ui &
 X_UI_PID=$!
 
+
+# ---------------------------------------------------------------
+# لینک ساب روی دامنه اختصاصی، بدون :2096
+# پنل subURI را مبنای ساخت لینک/QR قرار می‌دهد، پس پورت داخلی
+# دیگر در لینک ظاهر نمی‌شود.
+# ---------------------------------------------------------------
+SUB_URI="https://gucciyt.de5.net/sub/"
+DB="/etc/x-ui/x-ui.db"
+for _ in $(seq 1 30); do
+    [ -f "$DB" ] && break
+    sleep 1
+done
+if [ -f "$DB" ]; then
+    sqlite3 "$DB" "INSERT INTO settings (key,value) VALUES ('subURI','$SUB_URI')
+        ON CONFLICT(key) DO UPDATE SET value='$SUB_URI';" \
+        && echo "OK subURI = $SUB_URI" \
+        || echo "WARN subURI set failed"
+else
+    echo "WARN database not found; subURI not set"
+fi
+
 sleep 2
 
 echo "▶️  Starting nginx in foreground on port $NGINX_PORT..."
