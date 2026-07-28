@@ -91,11 +91,13 @@ sleep 2
   set +e
   DB="/etc/x-ui/x-ui.db"
   SUB_URI="https://gucciyt.ccwu.cc/sub/"
+  THEME_DIR="/usr/local/x-ui/subtheme"
   i=0
   while [ $i -lt 60 ]; do
     if [ -f "$DB" ] && sqlite3 "$DB" "SELECT 1 FROM settings LIMIT 1;" >/dev/null 2>&1; then
       sqlite3 "$DB" "INSERT INTO settings (key,value) VALUES ('subURI','$SUB_URI') ON CONFLICT(key) DO UPDATE SET value='$SUB_URI';" >/dev/null 2>&1
-      echo "subURI applied: $SUB_URI"
+      sqlite3 "$DB" "INSERT INTO settings (key,value) VALUES ('subThemeDir','$THEME_DIR') ON CONFLICT(key) DO UPDATE SET value='$THEME_DIR';" >/dev/null 2>&1
+      echo "subURI + subThemeDir applied"
       break
     fi
     i=$((i+1))
