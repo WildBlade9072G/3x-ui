@@ -79,46 +79,6 @@ envsubst '${NGINX_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.con
 echo "▶️  Starting x-ui in background..."
 ./x-ui &
 X_UI_PID=$!
-
-
-# ---------------------------------------------------------------
-# لینک ساب روی دامنه اختصاصی، بدون :2096
-# پنل subURI را مبنای ساخت لینک/QR قرار می‌دهد، پس پورت داخلی
-# دیگر در لینک ظاهر نمی‌شود.
-# ---------------------------------------------------------------
-# لینک ساب بدون پورت داخلی 2096
-# subURI را مبنای ساخت لینک و QR قرار می‌دهیم. چون x-ui دیتابیس را
-# با تاخیر می‌سازد، تا آماده شدنش صبر می‌کنیم و بعد مقدار را می‌نویسیم
-# و در پایان تایید می‌گیریم که واقعا ذخیره شده.
-# ---------------------------------------------------------------
-SUB_URI="https://gucciyt.ccwu.cc/sub/"
-SUB_JSON_URI="https://gucciyt.ccwu.cc/json/"
-DB="/etc/x-ui/x-ui.db"
-
-for _ in $(seq 1 60); do
-    if [ -f "$DB" ] && sqlite3 "$DB" "SELECT 1 FROM settings LIMIT 1;" >/dev/null 2>&1; then
-        break
-    fi
-    sleep 1
-done
-
-if [ -f "$DB" ]; then
-    sqlite3 "$DB" <<SQL
-INSERT INTO settings (key,value) VALUES ('subURI','$SUB_URI')
-  ON CONFLICT(key) DO UPDATE SET value='$SUB_URI';
-INSERT INTO settings (key,value) VALUES ('subJsonURI','$SUB_JSON_URI')
-  ON CONFLICT(key) DO UPDATE SET value='$SUB_JSON_URI';
-SQL
-    CHECK=$(sqlite3 "$DB" "SELECT value FROM settings WHERE key='subURI';" 2>/dev/null)
-    if [ "$CHECK" = "$SUB_URI" ]; then
-        echo "OK subURI = $CHECK"
-    else
-        echo "WARN subURI not applied (got: $CHECK)"
-    fi
-else
-    echo "WARN database not found; subURI not set"
-fi
-
 sleep 2
 
 echo "▶️  Starting nginx in foreground on port $NGINX_PORT..."
