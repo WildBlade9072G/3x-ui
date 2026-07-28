@@ -2,15 +2,10 @@ worker_processes 1;
 events { worker_connections 1024; }
 
 http {
-    # ------------------------------------------------------------------
-    # دامنه اختصاصی لینک ساب: فقط /sub/ سرو می‌شود.
-    # پنل روی این دامنه در دسترس نیست (۴۰۴) تا کسی از روی لینک ساب
-    # نتواند وارد پنل شود.
-    # ------------------------------------------------------------------
     server {
         listen ${NGINX_PORT};
-        server_name gucciyt.de5.net;
 
+        # مسیر Subscription (ساب لینک) - فوروارد به پورت داخلی 2096
         location /sub/ {
             proxy_pass http://127.0.0.1:2096/sub/;
             proxy_http_version 1.1;
@@ -19,17 +14,6 @@ http {
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             proxy_set_header X-Forwarded-Proto $scheme;
         }
-
-        location / {
-            return 404;
-        }
-    }
-
-    # ------------------------------------------------------------------
-    # دامنه پنل (پیش‌فرض): پنل + اینباندها.
-    # ------------------------------------------------------------------
-    server {
-        listen ${NGINX_PORT} default_server;
 
         # مسیر پنل وب (فوروارد به پورت داخلی 2054 که x-ui روش گوش می‌ده)
         # پنل حالا روی ریشه دامنه سرو می‌شود.
