@@ -2,224 +2,380 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>اطلاعات اشتراک</title>
 <style>
-  :root{
-    --bg:#0f1115; --card:#171a21; --line:#252a34;
-    --txt:#e6e8ec; --dim:#9aa3b2;
-    --on:#22c55e; --off:#6b7280; --accent:#7c5cff;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;padding:16px;background:var(--bg);color:var(--txt);
-       font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif}
-  .wrap{max-width:640px;margin:0 auto}
-  .card{background:var(--card);border:1px solid var(--line);
-        border-radius:14px;padding:18px;margin-bottom:14px}
-  h1{font-size:17px;margin:0 0 14px}
-  table{width:100%;border-collapse:collapse}
-  td{padding:11px 8px;border-bottom:1px solid var(--line);font-size:14px}
-  td:first-child{color:var(--dim);width:42%}
-  tr:last-child td{border-bottom:none}
-  .pill{display:inline-block;padding:3px 11px;border-radius:999px;
-        font-size:12px;font-weight:600}
-  .pill.on{background:rgba(34,197,94,.15);color:var(--on)}
-  .pill.off{background:rgba(107,114,128,.15);color:var(--off)}
-  .sec{font-size:13px;color:var(--dim);text-align:center;
-       margin:18px 0 10px;letter-spacing:.3px}
-  .row{display:flex;gap:8px;align-items:center;
-       background:#12151b;border:1px solid var(--line);
-       border-radius:10px;padding:11px;margin-bottom:8px}
-  .row .name{flex:1;font-size:13px;word-break:break-all}
-  button{background:var(--accent);color:#fff;border:0;border-radius:8px;
-         padding:7px 13px;font-size:12px;cursor:pointer;font-family:inherit}
-  button:active{opacity:.7}
-  .sub{font-size:12px;color:var(--dim);word-break:break-all;
-       background:#12151b;border:1px solid var(--line);
-       border-radius:10px;padding:11px;margin-bottom:8px}
-  .dev{font-weight:600}
+:root{
+  --bg0:#0a0b0f; --bg1:#12141c; --card:rgba(23,26,35,.72);
+  --line:rgba(255,255,255,.09); --txt:#eef0f5; --dim:#98a1b3;
+  --acc:#7c5cff; --acc2:#22d3ee; --on:#22c55e; --off:#64748b;
+  --shadow:0 18px 50px rgba(0,0,0,.55);
+}
+html[data-t="light"]{
+  --bg0:#eef1f7; --bg1:#dde3ee; --card:rgba(255,255,255,.82);
+  --line:rgba(15,23,42,.10); --txt:#0f172a; --dim:#5b6577;
+  --shadow:0 18px 44px rgba(15,23,42,.14);
+}
+html[data-t="gray"]{
+  --bg0:#1c1f26; --bg1:#282c36; --card:rgba(52,58,70,.72);
+  --line:rgba(255,255,255,.11); --txt:#e8eaef; --dim:#a6aebd;
+  --shadow:0 18px 44px rgba(0,0,0,.42);
+}
+*{box-sizing:border-box}
+body{
+  margin:0;padding:18px 14px 40px;min-height:100vh;color:var(--txt);
+  font-family:system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+  background:
+    radial-gradient(1100px 620px at 12% -8%, rgba(124,92,255,.30), transparent 60%),
+    radial-gradient(900px 520px at 88% 8%, rgba(34,211,238,.20), transparent 62%),
+    linear-gradient(160deg,var(--bg0),var(--bg1));
+  background-attachment:fixed;
+  transition:color .25s;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:radial-gradient(circle at 50% 22%,#000,transparent 78%);
+}
+.wrap{position:relative;z-index:1;max-width:660px;margin:0 auto}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:20px;
+  padding:20px;margin-bottom:16px;box-shadow:var(--shadow);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.title{font-size:17px;font-weight:700;flex:1;min-width:130px}
+.sid{
+  font-size:11px;color:var(--dim);background:rgba(124,92,255,.14);
+  border:1px solid rgba(124,92,255,.28);padding:4px 10px;border-radius:999px;
+  font-family:ui-monospace,monospace;
+}
+.ico{
+  width:36px;height:36px;border-radius:11px;border:1px solid var(--line);
+  background:transparent;color:var(--txt);cursor:pointer;font-size:15px;
+  display:grid;place-items:center;transition:.18s;flex-shrink:0;
+}
+.ico:hover{background:rgba(124,92,255,.16);transform:translateY(-1px)}
+.ring{display:flex;align-items:center;gap:16px;margin:6px 0 16px}
+.donut{position:relative;width:96px;height:96px;flex-shrink:0}
+.donut svg{transform:rotate(-90deg)}
+.donut .mid{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-size:15px;font-weight:800;
+}
+.meta{flex:1;min-width:0}
+.meta .big{font-size:20px;font-weight:800;margin-bottom:3px}
+.meta .sml{font-size:12px;color:var(--dim)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;
+  border-radius:999px;font-size:12px;font-weight:700;margin-top:9px}
+.pill.on{background:rgba(34,197,94,.16);color:var(--on)}
+.pill.off{background:rgba(100,116,139,.18);color:var(--off)}
+.dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.on .dot{animation:pulse 1.7s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.28}}
+table{width:100%;border-collapse:collapse}
+td{padding:12px 6px;border-bottom:1px solid var(--line);font-size:13.5px}
+td:first-child{color:var(--dim);width:44%}
+tr:last-child td{border-bottom:none}
+.sec{
+  display:flex;align-items:center;gap:10px;margin:20px 0 12px;
+  font-size:12px;color:var(--dim);font-weight:600;
+}
+.sec::before,.sec::after{content:"";height:1px;background:var(--line);flex:1}
+.item{
+  display:flex;gap:9px;align-items:center;padding:12px;margin-bottom:9px;
+  background:rgba(255,255,255,.035);border:1px solid var(--line);
+  border-radius:13px;transition:.18s;
+}
+.item:hover{border-color:rgba(124,92,255,.42);transform:translateX(-2px)}
+.item .nm{flex:1;min-width:0;font-size:13px;word-break:break-all;font-weight:600}
+.item .em{font-size:11px;color:var(--dim);margin-top:3px;font-weight:400}
+.b{
+  border:0;border-radius:10px;padding:8px 13px;font-size:12px;cursor:pointer;
+  font-family:inherit;font-weight:700;transition:.18s;flex-shrink:0;
+  background:linear-gradient(135deg,var(--acc),#5b3fd6);color:#fff;
+}
+.b.g{background:transparent;border:1px solid var(--line);color:var(--txt)}
+.b:active{transform:scale(.94)}
+.urlbox{
+  font-size:11.5px;color:var(--dim);word-break:break-all;
+  background:rgba(0,0,0,.22);border:1px solid var(--line);
+  border-radius:12px;padding:12px;margin-bottom:10px;
+  font-family:ui-monospace,monospace;line-height:1.6;
+}
+.row2{display:flex;gap:9px;flex-wrap:wrap}
+.qr{
+  display:none;place-items:center;padding:18px;margin-top:10px;
+  background:#fff;border-radius:14px;
+}
+.qr.show{display:grid}
+.qr img,.qr canvas{max-width:200px;width:100%;height:auto;display:block}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,120px);
+  background:var(--acc);color:#fff;padding:11px 22px;border-radius:999px;
+  font-size:13px;font-weight:700;z-index:99;transition:transform .3s;
+  box-shadow:0 8px 26px rgba(124,92,255,.5);
+}
+.toast.show{transform:translate(-50%,0)}
 </style>
 </head>
 <body>
 <div class="wrap">
 
   <div class="card">
-    <h1>اطلاعات اشتراک</h1>
+    <div class="top">
+      <div class="title" data-i="title">اطلاعات اشتراک</div>
+      <span class="sid">{{.sId}}</span>
+      <button class="ico" id="bt" title="تم">◐</button>
+      <button class="ico" id="bl" title="زبان">فا</button>
+    </div>
+
+    <div class="ring">
+      <div class="donut">
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <circle cx="48" cy="48" r="41" fill="none" stroke="rgba(128,128,128,.22)" stroke-width="8"/>
+          <circle id="arc" cx="48" cy="48" r="41" fill="none" stroke="url(#g)"
+                  stroke-width="8" stroke-linecap="round"
+                  stroke-dasharray="257.6" stroke-dashoffset="257.6"/>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7c5cff"/><stop offset="100%" stop-color="#22d3ee"/>
+          </linearGradient></defs>
+        </svg>
+        <div class="mid" id="pct">0%</div>
+      </div>
+      <div class="meta">
+        <div class="big" id="mUsed">0.00B</div>
+        <div class="sml"><span data-i="of">از</span> <span id="mTot">∞</span></div>
+        <div id="mSt"><span class="pill off"><span class="dot"></span><span data-i="off">آفلاین</span></span></div>
+      </div>
+    </div>
+
     <table>
-      <tr><td>شناسه اشتراک</td><td>{{.sId}}</td></tr>
-      <tr><td>وضعیت اتصال</td><td id="st"><span class="pill off">آفلاین</span></td></tr>
-      <tr><td>آخرین دستگاه</td><td class="dev" id="dev">—</td></tr>
-      <tr><td>آخرین اتصال</td><td id="lo">—</td></tr>
-      <tr><td>دانلود</td><td>{{.download}}</td></tr>
-      <tr><td>آپلود</td><td>{{.upload}}</td></tr>
-      <tr><td>مصرف کل</td><td>{{.used}}</td></tr>
-      <tr><td>حجم کل</td><td>{{.total}}</td></tr>
-      <tr><td>باقیمانده</td><td>{{if .remained}}{{.remained}}{{else}}نامحدود{{end}}</td></tr>
-      <tr><td>تاریخ پایان</td><td id="exp">—</td></tr>
+      <tr><td data-i="email">ایمیل</td><td id="tEmail">—</td></tr>
+      <tr><td data-i="device">آخرین دستگاه</td><td id="tDev">—</td></tr>
+      <tr><td data-i="last">آخرین اتصال</td><td id="tLast">—</td></tr>
+      <tr><td data-i="dl">دانلود</td><td>{{.download}}</td></tr>
+      <tr><td data-i="ul">آپلود</td><td>{{.upload}}</td></tr>
+      <tr><td data-i="rem">باقیمانده</td><td>{{if .remained}}{{.remained}}{{else}}<span data-i="unl">نامحدود</span>{{end}}</td></tr>
+      <tr><td data-i="exp">تاریخ پایان</td><td id="tExp">—</td></tr>
+      <tr><td data-i="left">روز باقیمانده</td><td id="tLeft">—</td></tr>
     </table>
   </div>
 
   <div class="card">
-    <div class="sec">لینک اشتراک</div>
-    <div class="sub" id="suburl">{{.subUrl}}</div>
-    <button onclick="cp(document.getElementById('suburl').innerText,this)">کپی لینک</button>
+    <div class="sec" data-i="sublink">لینک اشتراک</div>
+    <div class="urlbox" id="uSub">{{.subUrl}}</div>
+    <div class="row2">
+      <button class="b" onclick="cp(document.getElementById('uSub').innerText)"><span data-i="copy">کپی لینک</span></button>
+      <button class="b g" onclick="qr('qSub',document.getElementById('uSub').innerText)"><span data-i="qr">کد QR</span></button>
+    </div>
+    <div class="qr" id="qSub"></div>
 
-    <div class="sec">کانفیگ‌ها</div>
+    <div class="sec" data-i="configs">کانفیگ‌ها</div>
     <div id="list"></div>
   </div>
 
 </div>
+<div class="toast" id="toast"></div>
 
 <script>
-var LINKS = {{.links}};
-var LAST_ONLINE = {{.lastOnline}};
+var LINKS  = {{.links}};
+var EMAILS = {{.emails}};
+var LAST   = {{.lastOnline}};
 var EXPIRE = {{.expire}};
+var USEDB  = {{.downloadByte}} + {{.uploadByte}};
+var TOTB   = {{.totalByte}};
+var USEDS  = "{{.used}}";
+var TOTS   = "{{.total}}";
 
-// ---- نام کانفیگ: هر چیزی بعد از # ----
-function nameOf(link){
-  var i = link.indexOf('#');
-  if (i < 0) return 'کانفیگ';
-  try { return decodeURIComponent(link.slice(i+1)); }
-  catch(e){ return link.slice(i+1); }
+var T = {
+  fa:{title:"اطلاعات اشتراک",of:"از",on:"آنلاین",off:"آفلاین",email:"ایمیل",
+      device:"آخرین دستگاه",last:"آخرین اتصال",dl:"دانلود",ul:"آپلود",
+      rem:"باقیمانده",exp:"تاریخ پایان",left:"روز باقیمانده",unl:"نامحدود",
+      sublink:"لینک اشتراک",configs:"کانفیگ‌ها",copy:"کپی لینک",qr:"کد QR",
+      copied:"کپی شد",never:"تاکنون متصل نشده",noexp:"بدون انقضا",
+      now:"چند لحظه پیش",min:"دقیقه پیش",hr:"ساعت پیش",day:"روز پیش",
+      none:"کانفیگی موجود نیست",cp:"کپی",unk:"نامشخص"},
+  en:{title:"Subscription Info",of:"of",on:"Online",off:"Offline",email:"Email",
+      device:"Last Device",last:"Last Seen",dl:"Download",ul:"Upload",
+      rem:"Remaining",exp:"Expire Date",left:"Days Left",unl:"Unlimited",
+      sublink:"Subscription Link",configs:"Configs",copy:"Copy Link",qr:"QR Code",
+      copied:"Copied",never:"Never connected",noexp:"No expiry",
+      now:"just now",min:"min ago",hr:"hr ago",day:"days ago",
+      none:"No configs",cp:"Copy",unk:"Unknown"},
+  ru:{title:"Информация",of:"из",on:"Онлайн",off:"Офлайн",email:"Эл. почта",
+      device:"Устройство",last:"Был онлайн",dl:"Загрузка",ul:"Отдача",
+      rem:"Осталось",exp:"Дата окончания",left:"Дней осталось",unl:"Безлимит",
+      sublink:"Ссылка подписки",configs:"Конфиги",copy:"Копировать",qr:"QR-код",
+      copied:"Скопировано",never:"Не подключался",noexp:"Без срока",
+      now:"только что",min:"мин назад",hr:"ч назад",day:"дн назад",
+      none:"Нет конфигов",cp:"Копия",unk:"Неизвестно"}
+};
+var LANGS=["fa","en","ru"], LBL={fa:"فا",en:"EN",ru:"RU"};
+var lang = localStorage.getItem("sl") || "fa";
+var THEMES=["dark","light","gray"], GL={dark:"◐",light:"☀",gray:"◑"};
+var theme = localStorage.getItem("st") || "dark";
+
+function t(k){ return (T[lang]&&T[lang][k]) || T.fa[k] || k; }
+
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.documentElement.dir  = (lang==="fa") ? "rtl" : "ltr";
+  var n = document.querySelectorAll("[data-i]");
+  for (var i=0;i<n.length;i++) n[i].textContent = t(n[i].getAttribute("data-i"));
+  document.getElementById("bl").textContent = LBL[lang];
+  render();
 }
+function applyTheme(){
+  document.documentElement.setAttribute("data-t", theme);
+  document.getElementById("bt").textContent = GL[theme];
+}
+document.getElementById("bl").onclick = function(){
+  lang = LANGS[(LANGS.indexOf(lang)+1) % LANGS.length];
+  localStorage.setItem("sl",lang); applyLang();
+};
+document.getElementById("bt").onclick = function(){
+  theme = THEMES[(THEMES.indexOf(theme)+1) % THEMES.length];
+  localStorage.setItem("st",theme); applyTheme();
+};
 
-// ---- تشخیص دستگاه از روی مرورگر خود کاربر ----
-function detectDevice(){
-  var u = navigator.userAgent || '';
-  var d = navigator.userAgentData;
-  if (d && d.platform){
-    if (d.platform === 'Android') return androidName(u);
-    if (d.platform === 'Windows') return 'ویندوز';
-    if (d.platform === 'macOS')   return 'مک';
+function nameOf(l){
+  var i=l.indexOf("#"); if(i<0) return "Config";
+  try{ return decodeURIComponent(l.slice(i+1)); }catch(e){ return l.slice(i+1); }
+}
+function detectDev(){
+  var u=navigator.userAgent||"", d=navigator.userAgentData;
+  if(d&&d.platform){
+    if(d.platform==="Android") return andr(u);
+    if(d.platform==="Windows") return "Windows";
+    if(d.platform==="macOS")   return "macOS";
   }
-  if (/iPad/i.test(u)) return 'آی‌پد';
-  if (/iPhone/i.test(u)) return 'آیفون';
-  if (/iPod/i.test(u)) return 'آی‌پاد';
-  // آیپد جدید خودش را مک معرفی می‌کند
-  if (/Macintosh/i.test(u) && navigator.maxTouchPoints > 1) return 'آی‌پد';
-  if (/Android/i.test(u)) return androidName(u);
-  if (/Windows/i.test(u)) return 'ویندوز';
-  if (/Macintosh|Mac OS X/i.test(u)) return 'مک';
-  if (/Linux/i.test(u)) return 'لینوکس';
-  return 'نامشخص';
+  if(/iPad/i.test(u)) return "iPad";
+  if(/iPhone/i.test(u)) return "iPhone";
+  if(/iPod/i.test(u)) return "iPod";
+  if(/Macintosh/i.test(u)&&navigator.maxTouchPoints>1) return "iPad";
+  if(/Android/i.test(u)) return andr(u);
+  if(/Windows/i.test(u)) return "Windows";
+  if(/Macintosh|Mac OS X/i.test(u)) return "macOS";
+  if(/CrOS/i.test(u)) return "ChromeOS";
+  if(/Linux/i.test(u)) return "Linux";
+  return t("unk");
 }
-
-function androidName(u){
-  var brands = [
-    [/Xiaomi|Redmi|POCO|MI\s|M2\d{3}|22\d{6}/i, 'شیائومی'],
-    [/SM-|Samsung|Galaxy/i,                     'سامسونگ'],
-    [/HUAWEI|Honor|HMA-|ANE-|VOG-/i,            'هواوی'],
-    [/OPPO|CPH\d{4}/i,                          'اوپو'],
-    [/vivo|V\d{4}A/i,                           'ویوو'],
-    [/OnePlus|GM\d{4}|IN\d{4}/i,                'وان‌پلاس'],
-    [/realme|RMX\d{4}/i,                        'ریلمی'],
-    [/Pixel/i,                                  'پیکسل'],
-    [/Nokia/i,                                  'نوکیا'],
-    [/Motorola|moto/i,                          'موتورولا'],
-    [/LG-|LM-/i,                                'ال‌جی'],
-    [/Infinix/i,                                'اینفینیکس'],
-    [/Tecno/i,                                  'تکنو'],
-    [/ZTE/i,                                    'زدتی‌ای'],
-    [/Lenovo/i,                                 'لنوو'],
-    [/ASUS/i,                                   'ایسوس'],
-    [/Sony|XQ-/i,                               'سونی'],
-    [/Nothing|A0\d{2}/i,                        'ناتینگ']
-  ];
-  for (var i=0;i<brands.length;i++){
-    if (brands[i][0].test(u)) return brands[i][1] + ' (اندروید)';
-  }
-  return 'اندروید';
+function andr(u){
+  var b=[[/Redmi/i,"Redmi"],[/POCO/i,"POCO"],[/Xiaomi|MI\s|M2\d{3}|22\d{6}|23\d{6}/i,"Xiaomi"],
+    [/SM-|Samsung|Galaxy/i,"Samsung"],[/Honor/i,"Honor"],
+    [/HUAWEI|HMA-|ANE-|VOG-|ELS-/i,"Huawei"],[/OPPO|CPH\d{4}/i,"OPPO"],
+    [/vivo|V\d{4}A/i,"vivo"],[/OnePlus|GM\d{4}|IN\d{4}|KB\d{4}/i,"OnePlus"],
+    [/realme|RMX\d{4}/i,"realme"],[/Pixel/i,"Google Pixel"],[/Nokia|TA-\d{4}/i,"Nokia"],
+    [/Motorola|moto/i,"Motorola"],[/LG-|LM-/i,"LG"],[/Infinix/i,"Infinix"],
+    [/Tecno/i,"Tecno"],[/itel/i,"itel"],[/ZTE/i,"ZTE"],[/Lenovo/i,"Lenovo"],
+    [/ASUS/i,"ASUS"],[/Sony|XQ-|SO-\d{2}/i,"Sony"],[/Nothing|A0\d{2}/i,"Nothing"],
+    [/HTC/i,"HTC"],[/Meizu/i,"Meizu"]];
+  for(var i=0;i<b.length;i++) if(b[i][0].test(u)) return b[i][1]+" · Android";
+  return "Android";
 }
-
-// ---- وضعیت آنلاین از روی آخرین فعالیت ----
-function renderStatus(){
-  var el = document.getElementById('st');
-  var lo = document.getElementById('lo');
-  if (!LAST_ONLINE || LAST_ONLINE <= 0){
-    el.innerHTML = '<span class="pill off">آفلاین</span>';
-    lo.textContent = 'تاکنون متصل نشده';
-    return;
-  }
-  var ms   = LAST_ONLINE > 1e12 ? LAST_ONLINE : LAST_ONLINE * 1000;
-  var diff = Date.now() - ms;
-  // پنل هر ~۱۰ ثانیه به‌روز می‌کند؛ زیر ۳ دقیقه یعنی هنوز وصل است
-  if (diff < 180000){
-    el.innerHTML = '<span class="pill on">آنلاین</span>';
-  } else {
-    el.innerHTML = '<span class="pill off">آفلاین</span>';
-  }
-  lo.textContent = fmt(ms) + ' — ' + ago(diff);
+function fmtD(ms){
+  var loc = lang==="fa" ? "fa-IR" : (lang==="ru" ? "ru-RU" : "en-GB");
+  try{ return new Date(ms).toLocaleString(loc,
+    {year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}); }
+  catch(e){ return new Date(ms).toLocaleString(); }
 }
-
-function fmt(ms){
-  try {
-    return new Date(ms).toLocaleString('fa-IR',
-      {year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'});
-  } catch(e){ return new Date(ms).toLocaleString(); }
-}
-
 function ago(ms){
-  var s = Math.floor(ms/1000);
-  if (s < 60)    return 'چند لحظه پیش';
-  if (s < 3600)  return Math.floor(s/60) + ' دقیقه پیش';
-  if (s < 86400) return Math.floor(s/3600) + ' ساعت پیش';
-  return Math.floor(s/86400) + ' روز پیش';
+  var s=Math.floor(ms/1000);
+  if(s<60) return t("now");
+  if(s<3600) return Math.floor(s/60)+" "+t("min");
+  if(s<86400) return Math.floor(s/3600)+" "+t("hr");
+  return Math.floor(s/86400)+" "+t("day");
 }
+function render(){
+  document.getElementById("tDev").textContent   = detectDev();
+  document.getElementById("tEmail").textContent = (EMAILS&&EMAILS.length) ? EMAILS[0] : "—";
+  document.getElementById("mUsed").textContent  = USEDS;
+  document.getElementById("mTot").textContent   = TOTS;
 
-function renderExpire(){
-  var el = document.getElementById('exp');
-  if (!EXPIRE || EXPIRE <= 0){ el.textContent = 'بدون انقضا'; return; }
-  var ms = EXPIRE > 1e12 ? EXPIRE : EXPIRE * 1000;
-  el.textContent = fmt(ms);
-}
-
-// ---- لیست کانفیگ‌ها: فقط نام، بدون نوع و پروتکل ----
-function renderLinks(){
-  var box = document.getElementById('list');
-  if (!LINKS || !LINKS.length){
-    box.innerHTML = '<div class="sub">کانفیگی موجود نیست</div>';
-    return;
+  var st=document.getElementById("mSt"), lo=document.getElementById("tLast");
+  if(!LAST || LAST<=0){
+    st.innerHTML='<span class="pill off"><span class="dot"></span>'+t("off")+'</span>';
+    lo.textContent=t("never");
+  }else{
+    var ms = LAST>1e12 ? LAST : LAST*1000, df = Date.now()-ms;
+    st.innerHTML = df<180000
+      ? '<span class="pill on"><span class="dot"></span>'+t("on")+'</span>'
+      : '<span class="pill off"><span class="dot"></span>'+t("off")+'</span>';
+    lo.textContent = fmtD(ms)+" · "+ago(df);
   }
-  for (var i=0;i<LINKS.length;i++){
-    (function(link){
-      var row = document.createElement('div');
-      row.className = 'row';
-      var nm = document.createElement('div');
-      nm.className = 'name';
-      nm.textContent = nameOf(link);
-      var b = document.createElement('button');
-      b.textContent = 'کپی';
-      b.onclick = function(){ cp(link, b); };
-      row.appendChild(nm); row.appendChild(b);
-      box.appendChild(row);
-    })(LINKS[i]);
+
+  var ex=document.getElementById("tExp"), lf=document.getElementById("tLeft");
+  if(!EXPIRE || EXPIRE<=0){ ex.textContent=t("noexp"); lf.textContent="∞"; }
+  else{
+    var e = EXPIRE>1e12 ? EXPIRE : EXPIRE*1000;
+    ex.textContent = fmtD(e);
+    var d = Math.ceil((e-Date.now())/86400000);
+    lf.textContent = d>0 ? d : "0";
+  }
+
+  var p = (TOTB>0) ? Math.min(100, USEDB/TOTB*100) : 0;
+  document.getElementById("pct").textContent = (TOTB>0) ? p.toFixed(0)+"%" : "∞";
+  document.getElementById("arc").style.strokeDashoffset = 257.6*(1-p/100);
+
+  var box=document.getElementById("list"); box.innerHTML="";
+  if(!LINKS || !LINKS.length){
+    box.innerHTML='<div class="urlbox">'+t("none")+'</div>'; return;
+  }
+  for(var i=0;i<LINKS.length;i++){
+    (function(link,idx){
+      var it=document.createElement("div"); it.className="item";
+      var nm=document.createElement("div"); nm.className="nm";
+      nm.textContent=nameOf(link);
+      if(EMAILS && EMAILS[idx]){
+        var em=document.createElement("div"); em.className="em";
+        em.textContent=EMAILS[idx]; nm.appendChild(em);
+      }
+      var b1=document.createElement("button"); b1.className="b";
+      b1.textContent=t("cp"); b1.onclick=function(){ cp(link); };
+      var b2=document.createElement("button"); b2.className="b g";
+      b2.textContent="QR"; b2.onclick=function(){ qr("q"+idx,link); };
+      var q=document.createElement("div"); q.className="qr"; q.id="q"+idx;
+      it.appendChild(nm); it.appendChild(b1); it.appendChild(b2);
+      box.appendChild(it); box.appendChild(q);
+    })(LINKS[i],i);
   }
 }
-
-function cp(text, btn){
-  var done = function(){
-    var t = btn.textContent; btn.textContent = 'کپی شد';
-    setTimeout(function(){ btn.textContent = t; }, 1200);
+function qr(id,text){
+  var el=document.getElementById(id);
+  if(el.classList.contains("show")){ el.classList.remove("show"); return; }
+  if(!el.dataset.done){
+    var img=new Image();
+    img.src="https://api.qrserver.com/v1/create-qr-code/?size=320x320&margin=8&data="+
+            encodeURIComponent(text);
+    img.alt="QR"; el.appendChild(img); el.dataset.done="1";
+  }
+  el.classList.add("show");
+}
+function cp(text){
+  var done=function(){
+    var e=document.getElementById("toast");
+    e.textContent=t("copied"); e.classList.add("show");
+    setTimeout(function(){ e.classList.remove("show"); },1500);
   };
-  if (navigator.clipboard && window.isSecureContext){
-    navigator.clipboard.writeText(text).then(done, function(){ fallback(text, done); });
-  } else { fallback(text, done); }
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(text).then(done,function(){ fb(text,done); });
+  } else fb(text,done);
 }
-
-function fallback(text, done){
-  var ta = document.createElement('textarea');
-  ta.value = text; ta.style.position='fixed'; ta.style.opacity='0';
-  document.body.appendChild(ta); ta.select();
-  try { document.execCommand('copy'); done(); } catch(e){}
-  document.body.removeChild(ta);
+function fb(text,done){
+  var a=document.createElement("textarea");
+  a.value=text; a.style.position="fixed"; a.style.opacity="0";
+  document.body.appendChild(a); a.select();
+  try{ document.execCommand("copy"); done(); }catch(e){}
+  document.body.removeChild(a);
 }
-
-document.getElementById('dev').textContent = detectDevice();
-renderStatus();
-renderExpire();
-renderLinks();
-setInterval(renderStatus, 30000);
+applyTheme();
+applyLang();
+setInterval(render,30000);
 </script>
 </body>
 </html>
