@@ -6,8 +6,9 @@ http {
         listen ${NGINX_PORT};
 
         # مسیر پنل وب (فوروارد به پورت داخلی 2054 که x-ui روش گوش می‌ده)
-        location /managepanel/ {
-            proxy_pass http://127.0.0.1:2054/managepanel/;
+        # پنل حالا روی ریشه دامنه سرو می‌شود.
+        location / {
+            proxy_pass http://127.0.0.1:2054/;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
@@ -27,8 +28,8 @@ http {
             proxy_set_header X-Forwarded-Proto $scheme;
         }
 
-        # هر مسیر دیگه (اینباند VLESS/WebSocket) به پورت داخلی 8080
-        location / {
+        # اینباند VLESS/WebSocket روی پورت 8080 (مسیر اختصاصی، چون ریشه حالا پنل است)
+        location /in0 {
             proxy_pass http://127.0.0.1:8080;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
