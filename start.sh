@@ -71,7 +71,7 @@ echo "▶️  Starting fail2ban..."
 fail2ban-client -x start || echo "⚠️  fail2ban start failed (IP Limit may stay locked)"
 
 echo "🔧 Applying panel settings via x-ui CLI..."
-./x-ui setting -port 2054 -webBasePath / || true
+./x-ui setting -port 2054 -webBasePath /x9k2m7panel/ || true
 
 echo "🔧 Building nginx.conf for fixed port: $NGINX_PORT"
 envsubst '${NGINX_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
