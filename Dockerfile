@@ -21,6 +21,7 @@ RUN curl -L https://github.com/mhsanaei/3x-ui/releases/download/v3.5.0/x-ui-linu
 RUN mkdir -p /etc/x-ui /var/log/x-ui
 
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
+COPY subtheme/ /usr/local/x-ui/subtheme/
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
