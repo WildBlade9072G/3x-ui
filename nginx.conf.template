@@ -35,7 +35,7 @@ http {
 
         # اینباند VLESS/WebSocket روی پورت 8080 (مسیر اختصاصی، چون ریشه حالا پنل است)
         location /in0 {
-            proxy_pass http://127.0.0.1:443;
+            proxy_pass http://127.0.0.1:8080;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection "upgrade";
@@ -45,21 +45,21 @@ http {
             proxy_set_header X-Forwarded-Proto $scheme;
         }
 location /gr1 {
-    grpc_pass grpc://127.0.0.4:443;
+    grpc_pass grpc://127.0.0.1:8086;
     grpc_set_header Host $host;
     grpc_set_header X-Real-IP $remote_addr;
     grpc_read_timeout 1h;
     grpc_send_timeout 1h;
 }
 location /gr2 {
-    grpc_pass grpc://127.0.0.5:443;
+    grpc_pass grpc://127.0.0.1:8082;
     grpc_set_header Host $host;
     grpc_set_header X-Real-IP $remote_addr;
     grpc_read_timeout 1h;
     grpc_send_timeout 1h;
 }
 location /up1 {
-    proxy_pass http://127.0.0.6:443;
+    proxy_pass http://127.0.0.1:8083;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
@@ -69,7 +69,7 @@ location /up1 {
     proxy_send_timeout 1h;
 }
 location /up2 {
-    proxy_pass http://127.0.0.7:443;
+    proxy_pass http://127.0.0.1:8084;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
@@ -79,7 +79,7 @@ location /up2 {
     proxy_send_timeout 1h;
 }
 location /xh1 {
-    proxy_pass http://127.0.0.8:443;
+    proxy_pass http://127.0.0.1:8085;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -89,7 +89,7 @@ location /xh1 {
     proxy_send_timeout 1h;
 }
 location /xh2 {
-    proxy_pass http://127.0.0.9:443;
+    proxy_pass http://127.0.0.1:8090;
     proxy_http_version 1.1;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
@@ -98,22 +98,32 @@ location /xh2 {
     proxy_read_timeout 1h;
     proxy_send_timeout 1h;
 }
+location /in1 {
+    proxy_pass http://127.0.0.1:8081;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_read_timeout 1h;
+    proxy_send_timeout 1h;
+}
 location /in7 {
-    proxy_pass http://127.0.0.2:443;
+    proxy_pass http://127.0.0.1:8087;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host;
 }
 location /in8 {
-    proxy_pass http://127.0.0.3:443;
+    proxy_pass http://127.0.0.1:8088;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
     proxy_set_header Host $host;
 }
 location /in9 {
-    proxy_pass http://127.0.0.10:443;
+    proxy_pass http://127.0.0.1:8089;
     proxy_http_version 1.1;
     proxy_set_header Upgrade $http_upgrade;
     proxy_set_header Connection "upgrade";
