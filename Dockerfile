@@ -20,6 +20,13 @@ RUN curl -L https://github.com/mhsanaei/3x-ui/releases/download/v3.5.0/x-ui-linu
 
 RUN mkdir -p /etc/x-ui /var/log/x-ui
 
+# ---------------------------------------------------------------
+# دیتابیس پنل در /etc/x-ui است. بدون VOLUME هر ری‌دیپلوی آن را
+# پاک می‌کند و اینباند/کلاینت/تنظیمات از بین می‌رود.
+# با VOLUME می‌توان در Railway یک دیسک دائمی به این مسیر وصل کرد.
+# ---------------------------------------------------------------
+VOLUME ["/etc/x-ui"]
+
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 COPY subtheme/ /usr/local/x-ui/subtheme/
 COPY start.sh /start.sh
