@@ -71,7 +71,7 @@ echo "▶️  Starting fail2ban..."
 fail2ban-client -x start || echo "⚠️  fail2ban start failed (IP Limit may stay locked)"
 
 echo "🔧 Applying panel settings via x-ui CLI..."
-./x-ui setting -port 2054 -webBasePath /guccipanel/ || true
+./x-ui setting -port 2054 -webBasePath /managepanel/ || true
 
 echo "🔧 Building nginx.conf for fixed port: $NGINX_PORT"
 envsubst '${NGINX_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
@@ -79,31 +79,8 @@ envsubst '${NGINX_PORT}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.con
 echo "▶️  Starting x-ui in background..."
 ./x-ui &
 X_UI_PID=$!
-sleep 2
 
-# ---------------------------------------------------------------
-# لینک ساب بدون پورت داخلی 2096
-# در پس‌زمینه اجرا می‌شود و داخل subshell با set +e ایزوله شده،
-# پس حتی اگر دیتابیس دیر بیاید یا خطا بدهد، nginx و پنل
-# هرگز متوقف نمی‌شوند.
-# ---------------------------------------------------------------
-(
-  set +e
-  DB="/etc/x-ui/x-ui.db"
-  SUB_URI="https://gucciyt.ccwu.cc/sub/"
-  THEME_DIR="/usr/local/x-ui/subtheme"
-  i=0
-  while [ $i -lt 60 ]; do
-    if [ -f "$DB" ] && sqlite3 "$DB" "SELECT 1 FROM settings LIMIT 1;" >/dev/null 2>&1; then
-      sqlite3 "$DB" "INSERT INTO settings (key,value) VALUES ('subURI','$SUB_URI') ON CONFLICT(key) DO UPDATE SET value='$SUB_URI';" >/dev/null 2>&1
-      sqlite3 "$DB" "INSERT INTO settings (key,value) VALUES ('subThemeDir','$THEME_DIR') ON CONFLICT(key) DO UPDATE SET value='$THEME_DIR';" >/dev/null 2>&1
-      echo "subURI + subThemeDir applied"
-      break
-    fi
-    i=$((i+1))
-    sleep 2
-  done
-) >/dev/null 2>&1 &
+sleep 2
 
 echo "▶️  Starting nginx in foreground on port $NGINX_PORT..."
 nginx -t
