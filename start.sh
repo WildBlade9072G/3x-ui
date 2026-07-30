@@ -82,6 +82,30 @@ X_UI_PID=$!
 
 sleep 2
 
+# ---------------------------------------------------------------
+# لینک ساب روی دامنه پنل — بدون پورت داخلی 2096
+# در پس‌زمینه اجرا می‌شود و داخل subshell با set +e ایزوله شده،
+# پس حتی اگر دیتابیس دیر بیاید یا خطا بدهد، nginx و پنل
+# هرگز متوقف نمی‌شوند. بعد از هر ریست هم دوباره اعمال می‌شود.
+# ---------------------------------------------------------------
+(
+  set +e
+  DB="/etc/x-ui/x-ui.db"
+  SUB_URI="https://gucciyt.ccwu.cc/sub/"
+  JSON_URI="https://gucciyt.ccwu.cc/json/"
+  i=0
+  while [ $i -lt 60 ]; do
+    if [ -f "$DB" ] && sqlite3 "$DB" "SELECT 1 FROM settings LIMIT 1;" >/dev/null 2>&1; then
+      sqlite3 "$DB" "INSERT INTO settings (key,value) VALUES ('subURI','$SUB_URI') ON CONFLICT(key) DO UPDATE SET value='$SUB_URI';" >/dev/null 2>&1
+      sqlite3 "$DB" "INSERT INTO settings (key,value) VALUES ('subJsonURI','$JSON_URI') ON CONFLICT(key) DO UPDATE SET value='$JSON_URI';" >/dev/null 2>&1
+      echo "subURI applied: $SUB_URI"
+      break
+    fi
+    i=$((i+1))
+    sleep 2
+  done
+) >/dev/null 2>&1 &
+
 echo "▶️  Starting nginx in foreground on port $NGINX_PORT..."
 nginx -t
 exec nginx -g "daemon off;"
